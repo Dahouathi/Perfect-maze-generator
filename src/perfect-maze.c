@@ -9,8 +9,8 @@
 
 void PrintEror(char* eror);
 SDL_bool ProcessEvents(SDL_Event *event);
-void Draw(SDL_Renderer *renderer, int colones, int rows, Cell *Grid );
-
+void Draw(SDL_Renderer *renderer, int colones, int rows, Cell *Grid, int  currentposition );
+void Update(Cell **Grid, int rows, int colones, int *currentposition);
 
 int main(int argc , char**argv)
 {
@@ -53,6 +53,9 @@ int main(int argc , char**argv)
                 countcells=j+i*colones;
                 add_cell(&Grid,create_cell(i,j),countcells);
             }
+    int currentpostion=0; //change current to position int
+
+
     /**********************Loop**************************/
 
     SDL_bool Lunch=SDL_TRUE;
@@ -62,9 +65,10 @@ int main(int argc , char**argv)
         /* code */
         SDL_Event event;
         Lunch=ProcessEvents(&event);
-        Draw(renderer,colones, rows,Grid);
-        //UPdate();
-        SDL_Delay(1000/60);
+        Draw(renderer,colones, rows,Grid,currentpostion);
+        Update(&Grid,rows,colones, &currentpostion);
+        SDL_Delay(1000/30);
+    
     }
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(screen);
@@ -102,16 +106,19 @@ SDL_bool ProcessEvents(SDL_Event *event)
     return Lunch;
 }
 
-void Draw(SDL_Renderer *renderer, int colones, int rows, Cell *Grid)
+void Draw(SDL_Renderer *renderer, int colones, 
+int rows, Cell *Grid, int currentposition)
 {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(renderer);
+    
     int position;
     for(int i=0;i<rows;i++)
         for(int j=0;j<colones;j++){
             position=j+i*colones;
             Draw_Cell(renderer,Grid[position],255,0,26);
         }
+    DrawcurentCell(Grid[currentposition],renderer);
     
 
 
@@ -120,3 +127,22 @@ void Draw(SDL_Renderer *renderer, int colones, int rows, Cell *Grid)
 
     SDL_RenderPresent(renderer);
 }
+
+void Update(Cell **Grid, int rows, int colones, 
+int *currentpostion)
+{
+    (*Grid)[(*currentpostion)].visited=SDL_TRUE;
+    
+    int nextpostion=findNextCell((*Grid)[*currentpostion],*Grid,rows,colones);
+    if(nextpostion!=-1){
+        
+        (*Grid)[nextpostion].visited=SDL_TRUE;
+        destroy_wall(&(*Grid)[*currentpostion],&(*Grid)[nextpostion]);
+        *currentpostion=nextpostion;
+
+    }
+    
+    
+
+}
+
