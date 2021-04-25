@@ -13,7 +13,29 @@ typedef struct Cell{
     SDL_bool state[4]; // state of walls if true then the wall apreas 
 }Cell;
 
-
+//stack functions
+void pushstack(int **stack, int value, int *top)
+{
+    (*stack)[++(*top)]=value;
+}
+int  popstack(int *stack, int *top)
+{
+    return stack[(*top)--];
+}
+SDL_bool is_stack_empty(int top)
+{
+    return top==-1;
+}
+int peek(int *stack,int top)
+{
+    return stack[top];
+}
+void printstack(int *stack, int top){
+    for(int i=0;i<top+1;i++){
+        printf("%d ",stack[top]);
+    }
+    printf("\n");
+}
 
 
 /***************functions cell related************/

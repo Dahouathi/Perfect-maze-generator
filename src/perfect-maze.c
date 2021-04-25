@@ -10,7 +10,8 @@
 void PrintEror(char* eror);
 SDL_bool ProcessEvents(SDL_Event *event);
 void Draw(SDL_Renderer *renderer, int colones, int rows, Cell *Grid, int  currentposition );
-void Update(Cell **Grid, int rows, int colones, int *currentposition);
+void Update(Cell **Grid, int rows, int colones,
+ int **stack, int *top);
 
 int main(int argc , char**argv)
 {
@@ -54,20 +55,27 @@ int main(int argc , char**argv)
                 add_cell(&Grid,create_cell(i,j),countcells);
             }
     int currentpostion=0; //change current to position int
-
+    /*********stack variables***********/
+    int *stack=malloc(sizeof(int)*(rows+1)*colones);
+    int top =-1;
 
     /**********************Loop**************************/
 
     SDL_bool Lunch=SDL_TRUE;
-
+    pushstack(&stack,currentpostion,&top);
     while (Lunch)
     {
         /* code */
+        if(!is_stack_empty(top)){
+            currentpostion=peek(stack,top);
+        }
+        
         SDL_Event event;
         Lunch=ProcessEvents(&event);
         Draw(renderer,colones, rows,Grid,currentpostion);
-        Update(&Grid,rows,colones, &currentpostion);
-        SDL_Delay(1000/30);
+        Update(&Grid,rows,colones,&stack,&top);
+        //printstack(stack,top);
+        SDL_Delay(1000/60);
     
     }
     SDL_DestroyRenderer(renderer);
@@ -129,17 +137,29 @@ int rows, Cell *Grid, int currentposition)
 }
 
 void Update(Cell **Grid, int rows, int colones, 
-int *currentpostion)
+ int **stack, int *top)
 {
-    (*Grid)[(*currentpostion)].visited=SDL_TRUE;
     
-    int nextpostion=findNextCell((*Grid)[*currentpostion],*Grid,rows,colones);
-    if(nextpostion!=-1){
+    if(!is_stack_empty(*top)){
+        int currentpostion=peek(*stack,*top);
+        (*Grid)[(currentpostion)].visited=SDL_TRUE;
+    
+        int nextpostion=findNextCell((*Grid)[currentpostion],*Grid,rows,colones);
+        if(nextpostion!=-1){
         
-        (*Grid)[nextpostion].visited=SDL_TRUE;
-        destroy_wall(Grid,*currentpostion,nextpostion);
-        *currentpostion=nextpostion;
+            
+            pushstack(stack,nextpostion,top);
+            destroy_wall(Grid,currentpostion,nextpostion);
+        
+        }
+        else{
+            popstack(*stack,top);
+        }
     }
+    else{
+        (*top)++;
+    }
+
     
     
 
