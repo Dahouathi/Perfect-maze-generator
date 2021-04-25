@@ -137,9 +137,8 @@ int *currentpostion)
     if(nextpostion!=-1){
         
         (*Grid)[nextpostion].visited=SDL_TRUE;
-        destroy_wall(&(*Grid)[*currentpostion],&(*Grid)[nextpostion]);
+        destroy_wall(Grid,*currentpostion,nextpostion);
         *currentpostion=nextpostion;
-
     }
     
     

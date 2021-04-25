@@ -279,8 +279,9 @@ int findNextCell(Cell current, Cell *Grid, int rows, int colones){
     }
 }
 
-void destroy_wall(Cell *current, Cell *next){
-
+void destroy_wall(Cell **Grid,int currentposition, int nextposition){
+    Cell *current= &(*Grid)[currentposition];
+    Cell *next   =&(*Grid)[nextposition];
     if(current->j-next->j==-1){
         next->state[3]=SDL_FALSE;
         current->state[1]=SDL_FALSE;
@@ -293,7 +294,7 @@ void destroy_wall(Cell *current, Cell *next){
         next->state[0]=SDL_FALSE;
         current->state[2]=SDL_FALSE;
     }
-    if(current->i-next->i==-1){
+    if(current->i-next->i==1){
         next->state[2]=SDL_FALSE;
         current->state[0]=SDL_FALSE;
     }
