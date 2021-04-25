@@ -117,5 +117,6 @@ void Draw(SDL_Renderer *renderer, int colones, int rows, Cell *Grid)
 
 
 
+
     SDL_RenderPresent(renderer);
 }

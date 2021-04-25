@@ -5,10 +5,10 @@
 #define W 40
 
 typedef struct Cell{
-    int i ;
+    int i ; // i nd j are position of the cell in the grid 
     int j ;
-    SDL_bool visited;
-    SDL_bool state[4];
+    SDL_bool visited; // state of a cell if it's visited or not
+    SDL_bool state[4]; // state of walls if true then the wall apreas 
 }Cell;
 
 
