@@ -1,0 +1,29 @@
+void f(int ox,int oy)
+{
+  int R = 15 ;
+  int x =0;
+  int y =R;
+  int h ;
+  SDL_RenderDrawPoint(renderer, x , y);
+  h=1-R;
+  while(x<y)
+  {
+    if (h>0)
+    {
+      y--;
+      h=h + 5 +2*(x-y);
+    }
+    else
+      h=h+2*x+3;
+    x++;
+    SDL_RenderDrawPoint(renderer, ox+x , oy+y);
+    SDL_RenderDrawPoint(renderer, ox-x , oy+y);
+    SDL_RenderDrawPoint(renderer, ox-x , oy-y);
+    SDL_RenderDrawPoint(renderer, ox+x , oy-y);
+    SDL_RenderDrawPoint(renderer, ox+(int)round(0.7*(x+y)) , oy+(int)round(0.7*(y-x)));
+    SDL_RenderDrawPoint(renderer, ox-(int)round(0.7*(x+y)) , oy+(int)round(0.7*(y-x)));
+    SDL_RenderDrawPoint(renderer, ox-(int)round(0.7*(x+y)) , oy-(int)round(0.7*(y-x)));
+    SDL_RenderDrawPoint(renderer, ox+(int)round(0.7*(x+y)) , oy-(int)round(0.7*(y-x)));
+    SDL_RenderPresent(renderer); // mettre a jour le renderer x))
+  }
+}
